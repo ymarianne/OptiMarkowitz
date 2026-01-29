@@ -45,4 +45,5 @@ pip install -r requirements.txt
 ```
 
 ## How to run
-jupyter notebook OptiMarkowitz.ipynb
+jupyter Lab OptiMarkowitz.ipynb
+
