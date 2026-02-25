@@ -17,16 +17,36 @@ A small, sector-diversified equity universe:
 - AAPL, MSFT, JPM, XOM, PFE, KO
 
 ## Methodology
-1. Download daily **adjusted close** prices (dividends/splits accounted for)
-2. Compute daily returns
-3. Estimate covariance on a rolling window
-4. Solve the constrained minimum-variance problem with **CVXPY**
-5. Backtest out-of-sample between rebalancing dates
-6. Report performance and risk metrics:
-   - annualized return / volatility
-   - Sharpe ratio (rf = 0 assumption unless specified)
-   - maximum drawdown
-   - cumulative performance
+### 1. Data Acquisition
+Daily adjusted close prices are downloaded for all assets to ensure consistency and correct treatment of dividends and splits. Dates are aligned and missing observations removed.
+### 2. Return Computation
+Daily returns are computed from price series and used for both statistical estimation and portfolio performance evaluation.
+### 3. Exploratory Analysis
+We visualize price trajectories and return dynamics to inspect volatility regimes, outliers, and potential structural patterns before modeling.
+### 4. Estimation of μ and Σ
+Expected returns and the covariance matrix are estimated from historical returns and annualized using standard market conventions.
+### 5. Correlation Structure
+The correlation matrix is analyzed to understand dependence across assets and assess diversification potential.
+### 6. Constrained Markowitz Optimization
+We solve a quadratic minimum-variance optimization problem under realistic constraints:
+- fully invested portfolio  
+- long-only weights  
+- maximum 20% allocation per asset  
+The problem is solved using **CVXPY**.
+### 7. Optimized Weights Analysis
+We analyze the resulting allocation to interpret diversification, concentration, and the relationship between weights and asset risk characteristics.
+### 8. Portfolio Performance Computation
+Portfolio returns are computed as the weighted sum of asset returns and used to construct cumulative performance curves.
+### 9. Equal-Weight Benchmark
+We compare results with an equally weighted portfolio to provide a robust baseline independent of estimation.
+### 10. Result Summary
+We evaluate portfolios using standard performance metrics:
+- annualized return  
+- annualized volatility  
+- Sharpe ratio  
+- maximum drawdown  
+### 11. Limitations and Out-of-Sample Validation
+In-sample optimization may lead to overfitting. To address this, we implement a rolling out-of-sample backtest where parameters are estimated only using past data and applied to future periods.
 
 ## Results (high level)
 - The minimum-variance portfolio tends to exhibit **lower volatility and smaller drawdowns**
@@ -46,4 +66,5 @@ pip install -r requirements.txt
 
 ## How to run
 jupyter Lab OptiMarkowitz.ipynb
+
 
